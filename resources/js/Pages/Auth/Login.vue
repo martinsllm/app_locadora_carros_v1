@@ -16,6 +16,8 @@ defineProps({
     },
 });
 
+
+
 const form = useForm({
     email: '',
     password: '',
@@ -27,19 +29,43 @@ const submit = () => {
         onFinish: () => form.reset('password'),
     });
 };
+
+const login = (e) => {
+    let url = 'http://localhost:8000/api/login'
+    let setup = {
+        method: 'post',
+        body: new URLSearchParams({
+            'email': form.email,
+            'password': form.password
+        })
+    }
+
+    fetch(url, setup)
+        .then(response => response.json())
+        .then(data => {
+            if(data.token){
+                document.cookie = 'token='+data.token+';SameSite=Lax'
+            }
+            form.post(route('login'), {
+                onFinish: () => form.reset('password'),
+            });
+        })
+
+    
+};
+
 </script>
 
 <template>
     <GuestLayout>
         <Head title="Log in" />
-
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
             {{ status }}
         </div>
-
-        <form @submit.prevent="submit">
+       
+        <form @submit.prevent="login($event)">
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="E-mail" />
 
                 <TextInput
                     id="email"
@@ -55,7 +81,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Senha" />
 
                 <TextInput
                     id="password"
@@ -73,7 +99,7 @@ const submit = () => {
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
                     <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
+                        >Mantenha-me conectado</span
                     >
                 </label>
             </div>
@@ -84,7 +110,7 @@ const submit = () => {
                     :href="route('password.request')"
                     class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                    Forgot your password?
+                    Esqueceu sua senha?
                 </Link>
 
                 <PrimaryButton
@@ -92,7 +118,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Log in
+                    Entrar
                 </PrimaryButton>
             </div>
         </form>
