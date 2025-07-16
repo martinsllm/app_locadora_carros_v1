@@ -1,5 +1,6 @@
 <script setup>
 import Container from '@/Layouts/Container.vue';
+import Header from '@/Layouts/Header.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 </script>
@@ -7,11 +8,7 @@ import { Head } from '@inertiajs/vue3';
 <template>
     <Head title="Marcas" />
     <AuthenticatedLayout>
-        <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Marcas
-            </h2>
-        </template>
+        <Header>Marcas</Header>
         
         <Container>
             <div class="flex flex-wrap -mx-3 mb-6">
