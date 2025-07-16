@@ -78,11 +78,11 @@ const showingNavigationDropdown = ref(false);
                                         <DropdownLink>
                                             Carros
                                         </DropdownLink>
-                                        <DropdownLink>
-                                        Marcas
+                                        <DropdownLink :href="route('marcas')">
+                                            Marcas
                                         </DropdownLink>
                                         <DropdownLink>
-                                        Modelos
+                                            Modelos
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
