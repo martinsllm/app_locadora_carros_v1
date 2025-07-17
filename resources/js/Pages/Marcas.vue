@@ -2,8 +2,9 @@
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import Container from '@/Layouts/Container.vue';
+import Card from '@/Layouts/Card.vue';
 import Header from '@/Layouts/Header.vue';
+import Table from '@/Layouts/Table.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 </script>
@@ -13,7 +14,8 @@ import { Head } from '@inertiajs/vue3';
     <AuthenticatedLayout>
         <Header>Marcas</Header>
         
-        <Container>
+        <!-- Card de buscas -->
+        <Card>
             <div class="flex flex-wrap -mx-3 mb-6">
 
                 <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -32,7 +34,16 @@ import { Head } from '@inertiajs/vue3';
                     <PrimaryButton>Pesquisar</PrimaryButton>
                 </div>     
             </div>
-        </Container> 
+        </Card> 
+
+        <!-- Card de listagem de marcas -->
+        <Card>
+            <Table></Table>
+
+            <div class="w-full px-3 mb-6 md:mb-0 mt-5" align="right">
+                <PrimaryButton>Adicionar</PrimaryButton>
+            </div>   
+        </Card>
 
     </AuthenticatedLayout>
 </template>

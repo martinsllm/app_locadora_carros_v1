@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Container from '@/Layouts/Container.vue';
+import Card from '@/Layouts/Card.vue';
 import Header from '@/Layouts/Header.vue';
 import { Head } from '@inertiajs/vue3';
 </script>
@@ -11,8 +11,8 @@ import { Head } from '@inertiajs/vue3';
     <AuthenticatedLayout>
         <Header>Seja Bem-Vindo!</Header>
 
-        <Container>
+        <Card>
             Apresentar indicadores do sistema!
-        </Container>
+        </Card>
     </AuthenticatedLayout>
 </template>
