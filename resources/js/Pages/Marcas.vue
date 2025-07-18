@@ -8,14 +8,20 @@ import Table from '@/Layouts/Table.vue';
 import Alert from '@/Layouts/Alert.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import Modal from '@/Layouts/Modal.vue';
 
 const showModal = ref(false)
+const urlBase = 'http://localhost:8000/api/v1/marca'
+const transacaoStatus = ref('')
+const transacaoMessage = reactive({
+    message: '',
+    data: ''
+})
 
 function toggleModal() {
     showModal.value = !showModal.value
-    form.transacaoStatus = ''
+    transacaoStatus.value = ''
 }
 
 function getToken() {
@@ -32,13 +38,9 @@ function getToken() {
 const form = useForm({
     nome: '',
     imagem: [],
-    transacaoStatus: '',
-    transacaoMessage: {}
 });
 
 const submit = () => {
-    let urlBase = 'http://localhost:8000/api/v1/marca'
-
     let formData = new FormData()
     formData.append('nome', form.nome)
     formData.append('imagem', form.imagem[0])
@@ -55,20 +57,28 @@ const submit = () => {
     
     axios.post(urlBase, formData, config)
         .then(response => {
-            form.transacaoStatus = 'sucesso'
-            form.transacaoMessage = {
-                message: 'ID do registro: ' + response.data.id
-            }
+            transacaoStatus.value = 'sucesso'
+            transacaoMessage.message = 'ID do registro: ' + response.data.id
+            transacaoMessage.data = ''
+            
         }).catch(errors => {
-            form.transacaoStatus = 'erro'
-            form.transacaoMessage = {
-                data: errors.response.data.errors
-            }
+            transacaoStatus.value = 'erro'
+            transacaoMessage.data = errors.response.data.errors
+            transacaoMessage.message = ''
         })
 };
 
 const carregarImagem = (e) => {
     form.imagem = e.target.files
+}
+
+const buscarLista = () => {
+    axios.get(urlBase)
+        .then(response => {
+            console.log(response)
+        }).catch(errors => {
+            console.log(errors)
+        })
 }
 
 </script>
@@ -96,7 +106,7 @@ const carregarImagem = (e) => {
                 </div>
 
                 <div class="w-full px-3 mb-6 md:mb-0 mt-5" align="right">
-                    <PrimaryButton>Pesquisar</PrimaryButton>
+                    <PrimaryButton @click="buscarLista()">Pesquisar</PrimaryButton>
                 </div>     
             </div>
         </Card> 
@@ -112,8 +122,8 @@ const carregarImagem = (e) => {
 
         <Modal v-if="showModal" titulo="Nova Marca">
             <form>
-                <Alert v-if="form.transacaoStatus === 'sucesso'" :message="form.transacaoMessage" class="mt-2" cor="green" titulo="Sucesso!"/>
-                <Alert v-if="form.transacaoStatus === 'erro'" :message="form.transacaoMessage" class="mt-2" cor="red" titulo="Erro!"/>
+                <Alert v-if="transacaoStatus === 'sucesso'" :message="transacaoMessage" class="mt-2" cor="green" titulo="Sucesso!"/>
+                <Alert v-if="transacaoStatus === 'erro'" :message="transacaoMessage" class="mt-2" cor="red" titulo="Erro!"/>
                 
                 <InputLabel class="mt-2">Nome</InputLabel>
                 <TextInput type="text" placeholder="Nome da marca" v-model="form.nome"/>
