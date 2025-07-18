@@ -8,7 +8,7 @@ import Table from '@/Layouts/Table.vue';
 import Alert from '@/Layouts/Alert.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import Modal from '@/Layouts/Modal.vue';
 
 const showModal = ref(false)
@@ -18,6 +18,7 @@ const transacaoMessage = reactive({
     message: '',
     data: ''
 })
+const marcas = ref([])
 
 function toggleModal() {
     showModal.value = !showModal.value
@@ -73,13 +74,26 @@ const carregarImagem = (e) => {
 }
 
 const buscarLista = () => {
-    axios.get(urlBase)
+    let token = getToken()
+
+    let config = {
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': token
+        }
+    }
+
+    axios.get(urlBase, config)
         .then(response => {
-            console.log(response)
+            marcas.value = response.data
         }).catch(errors => {
             console.log(errors)
         })
 }
+
+onMounted(() => {
+    buscarLista()
+})
 
 </script>
 
@@ -106,7 +120,7 @@ const buscarLista = () => {
                 </div>
 
                 <div class="w-full px-3 mb-6 md:mb-0 mt-5" align="right">
-                    <PrimaryButton @click="buscarLista()">Pesquisar</PrimaryButton>
+                    <PrimaryButton>Pesquisar</PrimaryButton>
                 </div>     
             </div>
         </Card> 
