@@ -5,6 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Card from '@/Layouts/Card.vue';
 import Header from '@/Layouts/Header.vue';
 import Table from '@/Layouts/Table.vue';
+import Alert from '@/Layouts/Alert.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -14,6 +15,7 @@ const showModal = ref(false)
 
 function toggleModal() {
     showModal.value = !showModal.value
+    form.transacaoStatus = ''
 }
 
 function getToken() {
@@ -30,6 +32,8 @@ function getToken() {
 const form = useForm({
     nome: '',
     imagem: [],
+    transacaoStatus: '',
+    transacaoMessage: []
 });
 
 const submit = () => {
@@ -51,9 +55,11 @@ const submit = () => {
     
     axios.post(urlBase, formData, config)
         .then(response => {
-            console.log(response)
+            form.transacaoStatus = 'sucesso'
+            form.transacaoMessage = response
         }).catch(errors => {
-            console.log(errors)
+            form.transacaoStatus = 'erro'
+            form.transacaoMessage = errors.response
         })
 };
 
@@ -102,6 +108,8 @@ const carregarImagem = (e) => {
 
         <Modal v-if="showModal" titulo="Nova Marca">
             <form>
+                <Alert v-if="form.transacaoStatus === 'sucesso'" :message="form.transacaoMessage" class="mt-2" cor="green" titulo="Sucesso!"/>
+                <Alert v-if="form.transacaoStatus === 'erro'" :message="form.transacaoMessage" class="mt-2" cor="red" titulo="Erro!"/>
                 <InputLabel class="mt-2">Nome</InputLabel>
                 <TextInput type="text" placeholder="Nome da marca" v-model="form.nome"/>
                 
@@ -111,7 +119,7 @@ const carregarImagem = (e) => {
 
                 <div class="flex shrink-0 flex-wrap items-center pt-4 justify-end">
                     <button @click="toggleModal" class="rounded-md border border-transparent py-2 px-4 text-center text-sm transition-all text-slate-600 hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
-                        Cancelar
+                        Voltar
                     </button>
                     <button @click="submit" class="rounded-md bg-green-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-green-700 focus:shadow-none active:bg-green-700 hover:bg-green-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2" type="button">
                         Confirmar
