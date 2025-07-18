@@ -20,11 +20,9 @@ let classeModificada = `bg-${props.cor}-100 border border-${props.cor}-400 text-
     <div v-bind:class="classeModificada" role="alert">
         <strong class="font-bold">{{ titulo }}</strong>
         <span class="block sm:inline">
-            <ul v-if="message.data.id">
-                <li>{{ 'ID do registro: ' + message.data.id }}</li>
-            </ul>
-            <ul v-if="message.data.errors">
-                <li v-for="e, key in message.data.errors" :key="key">{{ e[0] }}</li>
+            <p>{{ message.message }}</p>
+            <ul v-if="message.data">
+                <li v-for="e, key in message.data" :key="key">{{ e[0] }}</li>
             </ul>
         </span>
     </div>

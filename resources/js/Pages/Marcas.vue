@@ -33,7 +33,7 @@ const form = useForm({
     nome: '',
     imagem: [],
     transacaoStatus: '',
-    transacaoMessage: []
+    transacaoMessage: {}
 });
 
 const submit = () => {
@@ -56,10 +56,14 @@ const submit = () => {
     axios.post(urlBase, formData, config)
         .then(response => {
             form.transacaoStatus = 'sucesso'
-            form.transacaoMessage = response
+            form.transacaoMessage = {
+                message: 'ID do registro: ' + response.data.id
+            }
         }).catch(errors => {
             form.transacaoStatus = 'erro'
-            form.transacaoMessage = errors.response
+            form.transacaoMessage = {
+                data: errors.response.data.errors
+            }
         })
 };
 
@@ -110,6 +114,7 @@ const carregarImagem = (e) => {
             <form>
                 <Alert v-if="form.transacaoStatus === 'sucesso'" :message="form.transacaoMessage" class="mt-2" cor="green" titulo="Sucesso!"/>
                 <Alert v-if="form.transacaoStatus === 'erro'" :message="form.transacaoMessage" class="mt-2" cor="red" titulo="Erro!"/>
+                
                 <InputLabel class="mt-2">Nome</InputLabel>
                 <TextInput type="text" placeholder="Nome da marca" v-model="form.nome"/>
                 
