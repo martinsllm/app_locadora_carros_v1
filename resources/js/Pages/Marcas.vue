@@ -16,6 +16,17 @@ function toggleModal() {
     showModal.value = !showModal.value
 }
 
+function getToken() {
+    let token = document.cookie.split(";").find(indice => {
+        return indice.includes("token=")
+    })
+
+    token = token.split('=')[1]
+    token = 'Bearer ' + token
+
+    return token
+}
+
 const form = useForm({
     nome: '',
     imagem: [],
@@ -28,10 +39,13 @@ const submit = () => {
     formData.append('nome', form.nome)
     formData.append('imagem', form.imagem[0])
 
+    let token = getToken()
+
     let config = {
         headers: {
             'Content-Type': 'multipart/form-data',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Authorization': token
         }
     }
     
