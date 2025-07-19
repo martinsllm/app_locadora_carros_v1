@@ -1,6 +1,6 @@
 <script setup>
 
-defineProps({
+const props = defineProps({
     data: {
         type: Array,
     },
@@ -22,15 +22,14 @@ defineProps({
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="m in data" :key="m.id" class="bg-white border-b dark:bg-gray-50 dark:border-gray-700 border-gray-200 text-gray-500">
-                    <th scope="row" class="px-6 py-4 whitespace-nowrap">
-                        {{ m.id }}
-                    </th>
-                    <td class="px-6 py-4">
-                        {{ m.nome }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <img :src="'/storage/'+m.imagem" width="65" height="65"/>
+                <tr v-for="obj in data" :key="obj.id" class="bg-white border-b dark:bg-gray-50 dark:border-gray-700 border-gray-200 text-gray-500">
+                   <td v-for="valor,key in titulos" :key="key" class="px-6 py-4">
+                        <span v-if="valor == 'imagem'">
+                            <img :src="'/storage/'+obj[valor]" width="65" height="65"/>
+                        </span>
+                        <span v-else>
+                            {{ obj[valor] }}
+                        </span>
                     </td>
                 </tr>
             </tbody>
