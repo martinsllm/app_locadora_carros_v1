@@ -17,18 +17,18 @@ const props = defineProps({
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-200 dark:text-gray-400">
                 <tr>
                     <th scope="col" v-for="t,key in titulos" :key="key" class="px-6 py-3">
-                        {{ t }}
+                        {{ t.titulo }}
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="obj in data" :key="obj.id" class="bg-white border-b dark:bg-gray-50 dark:border-gray-700 border-gray-200 text-gray-500">
                    <td v-for="valor,key in titulos" :key="key" class="px-6 py-4">
-                        <span v-if="valor == 'imagem'">
-                            <img :src="'/storage/'+obj[valor]" width="65" height="65"/>
+                        <span v-if="valor.tipo === 'imagem'">
+                            <img :src="'/storage/'+obj[key]" width="65" height="65"/>
                         </span>
                         <span v-else>
-                            {{ obj[valor] }}
+                            {{ obj[key] }}
                         </span>
                     </td>
                 </tr>

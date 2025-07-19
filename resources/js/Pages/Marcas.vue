@@ -127,7 +127,22 @@ onMounted(() => {
 
         <!-- Card de listagem de marcas -->
         <Card>
-            <Table :data="marcas" :titulos="['id', 'nome', 'imagem']"></Table>
+            <Table :data="marcas" :titulos="{
+                id: {
+                    titulo: 'id',
+                    tipo: 'text'
+                },
+                nome: {
+                    titulo: 'nome',
+                    tipo: 'text'
+                },
+                imagem: {
+                    titulo: 'imagem',
+                    tipo: 'imagem'
+                }
+            }">
+
+            </Table>
 
             <div class="w-full px-3 mb-6 md:mb-0 mt-5" align="right">
                 <PrimaryButton @click="toggleModal">Adicionar</PrimaryButton>
