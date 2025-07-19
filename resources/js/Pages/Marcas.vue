@@ -6,6 +6,7 @@ import Card from '@/Layouts/Card.vue';
 import Header from '@/Layouts/Header.vue';
 import Table from '@/Layouts/Table.vue';
 import Alert from '@/Layouts/Alert.vue';
+import Pagination from '@/Layouts/Pagination.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { onMounted, reactive, ref } from 'vue';
@@ -86,6 +87,7 @@ const buscarLista = () => {
     axios.get(urlBase, config)
         .then(response => {
             marcas.value = response.data
+            console.log(marcas.links)
         }).catch(errors => {
             console.log(errors)
         })
@@ -127,7 +129,7 @@ onMounted(() => {
 
         <!-- Card de listagem de marcas -->
         <Card>
-            <Table :data="marcas" :titulos="{
+            <Table :data="marcas.data" :titulos="{
                 id: {
                     titulo: 'id',
                     tipo: 'text'
@@ -144,9 +146,19 @@ onMounted(() => {
 
             </Table>
 
-            <div class="w-full px-3 mb-6 md:mb-0 mt-5" align="right">
-                <PrimaryButton @click="toggleModal">Adicionar</PrimaryButton>
-            </div>   
+            <div class="flex flex-wrap -mx-3 mb-6 mt-5">
+                <div class="w-full md:w-1/2 px-3">
+                    <Pagination>
+                        <li v-for="l,key in marcas.links" :key="key">
+                            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-gray-200 border border-gray-300 hover:bg-gray-100 hover:text-gray-700" v-html="l.label"></a>
+                        </li>
+                    </Pagination>
+                </div> 
+
+                <div class="w-full md:w-1/2 px-3" align="right">
+                    <PrimaryButton @click="toggleModal">Adicionar</PrimaryButton>
+                </div> 
+            </div>  
         </Card>
 
         <Modal v-if="showModal" titulo="Nova Marca">

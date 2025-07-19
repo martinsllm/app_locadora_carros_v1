@@ -38,6 +38,11 @@ abstract class AbstractRepository
         return $this->model->get();
     }
 
+    public function getResultPaginate($num_per_page)
+    {
+        return $this->model->paginate($num_per_page);
+    }
+
 }
 
 ?>
