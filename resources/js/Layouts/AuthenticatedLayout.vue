@@ -31,7 +31,7 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div
-                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                                class="hidden space-x-8 sm:-my-px sm:ms-6 sm:flex sm:items-center"
                             >
                                 <NavLink
                                     :href="route('dashboard')"
@@ -48,8 +48,7 @@ const showingNavigationDropdown = ref(false);
                                     Locações
                                 </NavLink>
 
-                                <!-- Settings Dropdown -->
-                                <Dropdown class="mt-4">
+                                <Dropdown>
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button
@@ -86,10 +85,9 @@ const showingNavigationDropdown = ref(false);
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
+                                
                             </div>
                         </div>
-                        
-                        
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
                             <!-- Settings Dropdown -->
