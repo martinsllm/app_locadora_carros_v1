@@ -157,7 +157,10 @@ onMounted(() => {
                 <div class="w-full md:w-1/2 px-3">
                     <Pagination>
                         <li v-for="l,key in marcas.links" :key="key" @click="paginacao(l)">
-                            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-gray-200 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 focus:bg-white" v-html="l.label"></a>
+                            <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-gray-200 border border-gray-300 hover:bg-gray-100 hover:text-gray-70 cursor-pointer" tabindex="0">
+                                <span v-if="l.active" class="font-bold text-gray-800" v-html="l.label"></span>
+                                <span v-else v-html="l.label"></span>
+                            </a>
                         </li>
                     </Pagination>
                 </div> 
