@@ -13,7 +13,7 @@ import { onMounted, reactive, ref } from 'vue';
 import Modal from '@/Layouts/Modal.vue';
 
 const showModal = ref(false)
-const urlBase = 'http://localhost:8000/api/v1/marca'
+const urlBase = ref('http://localhost:8000/api/v1/marca')
 const transacaoStatus = ref('')
 const transacaoMessage = reactive({
     message: '',
@@ -43,6 +43,7 @@ const form = useForm({
 });
 
 const submit = () => {
+    urlBase.value = 'http://localhost:8000/api/v1/marca'
     let formData = new FormData()
     formData.append('nome', form.nome)
     formData.append('imagem', form.imagem[0])
@@ -57,7 +58,7 @@ const submit = () => {
         }
     }
     
-    axios.post(urlBase, formData, config)
+    axios.post(urlBase.value, formData, config)
         .then(response => {
             transacaoStatus.value = 'sucesso'
             transacaoMessage.message = 'ID do registro: ' + response.data.id
@@ -84,13 +85,19 @@ const buscarLista = () => {
         }
     }
 
-    axios.get(urlBase, config)
+    axios.get(urlBase.value, config)
         .then(response => {
             marcas.value = response.data
-            console.log(marcas.links)
         }).catch(errors => {
             console.log(errors)
         })
+}
+
+const paginacao = (l) => {
+    if(l.url !== null){
+        urlBase.value = l.url
+        buscarLista()
+    }
 }
 
 onMounted(() => {
@@ -149,8 +156,8 @@ onMounted(() => {
             <div class="flex flex-wrap -mx-3 mb-6 mt-5">
                 <div class="w-full md:w-1/2 px-3">
                     <Pagination>
-                        <li v-for="l,key in marcas.links" :key="key">
-                            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-gray-200 border border-gray-300 hover:bg-gray-100 hover:text-gray-700" v-html="l.label"></a>
+                        <li v-for="l,key in marcas.links" :key="key" @click="paginacao(l)">
+                            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-gray-200 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 focus:bg-white" v-html="l.label"></a>
                         </li>
                     </Pagination>
                 </div> 
