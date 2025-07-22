@@ -183,6 +183,10 @@ onMounted(() => {
                 imagem: {
                     titulo: 'imagem',
                     tipo: 'imagem'
+                },
+                created_at: {
+                    titulo: 'data de criação',
+                    tipo: 'data'
                 }
             }">
 
