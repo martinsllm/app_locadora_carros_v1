@@ -13,13 +13,22 @@ import { onMounted, reactive, ref } from 'vue';
 import Modal from '@/Layouts/Modal.vue';
 
 const showModal = ref(false)
+
 const urlBase = ref('http://localhost:8000/api/v1/marca')
+const urlPaginacao = ref('')
+const urlFiltro = ref('')
+
 const transacaoStatus = ref('')
 const transacaoMessage = reactive({
     message: '',
     data: ''
 })
 const marcas = ref([])
+
+const busca = reactive({
+    id: '',
+    nome: ''
+})
 
 function toggleModal() {
     showModal.value = !showModal.value
@@ -85,7 +94,9 @@ const buscarLista = () => {
         }
     }
 
-    axios.get(urlBase.value, config)
+    let url = urlBase.value + '?' + urlPaginacao.value + urlFiltro.value
+
+    axios.get(url, config)
         .then(response => {
             marcas.value = response.data
         }).catch(errors => {
@@ -94,11 +105,35 @@ const buscarLista = () => {
 }
 
 const paginacao = (l) => {
-    if(l.url !== null){
-        urlBase.value = l.url
+    if(l.url){
+        urlPaginacao.value = l.url.split('?')[1]
         buscarLista()
     }
 }
+
+const pesquisar = () => {
+    let filtro = ''
+
+    for(let chave in busca){
+        if(busca[chave]) {
+            if(filtro != ''){
+                filtro += ';'
+            }
+
+            filtro += chave + ':like:' + '%' + busca[chave] + '%'
+        }
+    }
+
+    if(filtro != ''){
+        urlPaginacao.value = 'page=1'
+        urlFiltro.value = '&filtro='+filtro
+    } else {
+        urlFiltro.value = ''
+    }
+
+    buscarLista()
+}
+
 
 onMounted(() => {
     buscarLista()
@@ -118,18 +153,18 @@ onMounted(() => {
 
                 <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                     <InputLabel>ID</InputLabel>
-                    <TextInput type="text" placeholder="ID"/>
+                    <TextInput type="text" placeholder="ID" v-model="busca.id"/>
                     <p class="text-xs italic">Opcional. Informe o ID do registro</p>
                 </div>
 
                 <div class="w-full md:w-1/2 px-3">
                     <InputLabel>Marca</InputLabel>
-                    <TextInput type="text" placeholder="Nome da marca" />
+                    <TextInput type="text" placeholder="Nome da marca" v-model="busca.nome" />
                     <p class="text-xs italic">Opcional. Informe o nome da marca</p>
                 </div>
 
                 <div class="w-full px-3 mb-6 md:mb-0 mt-5" align="right">
-                    <PrimaryButton>Pesquisar</PrimaryButton>
+                    <PrimaryButton @click="pesquisar">Pesquisar</PrimaryButton>
                 </div>     
             </div>
         </Card> 
@@ -164,10 +199,11 @@ onMounted(() => {
                         </li>
                     </Pagination>
                 </div> 
-
+                
                 <div class="w-full md:w-1/2 px-3" align="right">
                     <PrimaryButton @click="toggleModal">Adicionar</PrimaryButton>
                 </div> 
+                
             </div>  
         </Card>
 
