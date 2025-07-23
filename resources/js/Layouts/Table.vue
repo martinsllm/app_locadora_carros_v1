@@ -1,8 +1,7 @@
 <script setup>
-import Modal from '@/Layouts/Modal.vue';
-import { ref } from 'vue';
+import { useStore } from 'vuex';
 
-const showModal = ref(false)
+const store = useStore();
 
 const props = defineProps({
     data: {
@@ -10,11 +9,13 @@ const props = defineProps({
     },
     titulos: {
         type: Object,
-    },
+    }
 });
 
-function toggleModal() {
-    showModal.value = !showModal.value
+function setObjView(obj) {
+    store.state.item = obj
+    store.state.openModal = true
+    store.state.modalId = 'view'
 }
 
 </script>
@@ -41,22 +42,13 @@ function toggleModal() {
                         </span>
                     </td>
                     <td>
-                        <button @click="toggleModal" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Visualizar</button>
-                        <button type="button" class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">Atualizar</button>
+                        <button @click="setObjView(obj)" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Visualizar</button>
+                        <button class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">Atualizar</button>
                         <button type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">Remover</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-        
     </div>
 
-    <Modal v-if="showModal" titulo="Visualizar">
-        {{ data }}
-        <div class="flex shrink-0 flex-wrap items-center pt-4 justify-end">
-            <button @click="toggleModal" class="rounded-md border border-transparent py-2 px-4 text-center text-sm transition-all text-slate-600 hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
-                Fechar
-            </button>
-        </div>  
-    </Modal>
 </template>
