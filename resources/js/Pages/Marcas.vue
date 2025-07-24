@@ -175,9 +175,12 @@ function atualizar() {
     let url = urlBase.value + '/' + store.state.item.id
 
     let formData = new FormData()
-    formData.append('_method', 'put')
+    formData.append('_method', 'patch')
     formData.append('nome', store.state.item.nome)
-    formData.append('imagem', form.imagem[0])
+
+    if(form.imagem[0]) {
+        formData.append('imagem', form.imagem[0])
+    }
 
     let config = {
         headers: {
@@ -190,6 +193,7 @@ function atualizar() {
         .then(response => {
             transacaoStatus.value = 'sucesso'
             transacaoMessage.message = 'Registro ' + response.data.id + ' atualizado com sucesso!'
+            transacaoMessage.data = ''
 
             setTimeout(function() {
                 location.reload();
@@ -342,7 +346,7 @@ onMounted(() => {
                 <TextInput type="text" placeholder="Nome da marca" v-model="store.state.item.nome"/>
                 
                 <InputLabel class="mt-2">Imagem</InputLabel>
-                <TextInput type="file" placeholder="Imagem" @change="carregarImagem($event)"/>
+                <TextInput type="file" id="atualizarImagem" placeholder="Imagem" @change="carregarImagem($event)"/>
                 <p class="text-xs italic">Selecione no formato PNG ou JPG</p>
 
                 <div class="flex shrink-0 flex-wrap items-center pt-4 justify-end">

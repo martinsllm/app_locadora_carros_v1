@@ -1,5 +1,7 @@
 <script setup>
 import { useStore } from 'vuex';
+import { format } from 'date-fns';
+
 
 const store = useStore();
 
@@ -40,6 +42,9 @@ function setObj(obj, modalId) {
                    <td v-for="valor,key in titulos" :key="key" class="px-6 py-4">
                         <span v-if="valor.tipo === 'imagem'">
                             <img :src="'/storage/'+obj[key]" width="55" height="55"/>
+                        </span>
+                        <span v-else-if="valor.tipo === 'data'">
+                            {{ format(obj[key], 'dd/MM/yyyy') }}
                         </span>
                         <span v-else>
                             {{ obj[key] }}
