@@ -157,11 +157,17 @@ function remover() {
     }
 
     axios.post(url, formData, config)
-        .then(() => {
+        .then(response => {
+            transacaoStatus.value = 'sucesso'
+            transacaoMessage.message = response.data.msg
             buscarLista()
-            window.location.reload()
+
+            setTimeout(function() {
+                location.reload();
+            }, 5000);  
         }).catch(errors => {
-            console.log(errors)
+            transacaoStatus.value = 'erro'
+            transacaoMessage.message = errors.response.data.erro
         })
 }
 
@@ -280,6 +286,9 @@ onMounted(() => {
         </Modal>
 
         <Modal v-if="store.state.openModal && store.state.modalId === 'delete'" titulo="Remover Marca">
+            <Alert v-if="transacaoStatus === 'sucesso'" :message="transacaoMessage" class="mt-2" cor="green" titulo="Sucesso!"/>
+            <Alert v-if="transacaoStatus === 'erro'" :message="transacaoMessage" class="mt-2" cor="red" titulo="Erro!"/>
+            
             <div class="mt-2">
                 Deseja remover a marca {{ store.state.item.nome }}?
             </div>
