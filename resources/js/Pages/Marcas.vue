@@ -171,6 +171,36 @@ function remover() {
         })
 }
 
+function atualizar() {
+    let url = urlBase.value + '/' + store.state.item.id
+
+    let formData = new FormData()
+    formData.append('_method', 'put')
+    formData.append('nome', store.state.item.nome)
+    formData.append('imagem', form.imagem[0])
+
+    let config = {
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': getToken()
+        }
+    }
+
+    axios.post(url, formData, config)
+        .then(response => {
+            transacaoStatus.value = 'sucesso'
+            transacaoMessage.message = 'Registro ' + response.data.id + ' atualizado com sucesso!'
+
+            setTimeout(function() {
+                location.reload();
+            }, 3000);  
+        }).catch(errors => {
+            transacaoStatus.value = 'erro'
+            transacaoMessage.data = errors.response.data.errors
+            console.log(errors.response.data.errors)
+        })
+}
+
 
 onMounted(() => {
     buscarLista()
@@ -301,6 +331,29 @@ onMounted(() => {
                     Remover
                 </button>
             </div>  
+        </Modal>
+
+        <Modal v-if="store.state.openModal && store.state.modalId === 'update'" titulo="Alterar Marca">
+            <form>
+                <Alert v-if="transacaoStatus === 'sucesso'" :message="transacaoMessage" class="mt-2" cor="green" titulo="Sucesso!"/>
+                <Alert v-if="transacaoStatus === 'erro'" :message="transacaoMessage" class="mt-2" cor="red" titulo="Erro!"/>
+                
+                <InputLabel class="mt-2">Nome</InputLabel>
+                <TextInput type="text" placeholder="Nome da marca" v-model="store.state.item.nome"/>
+                
+                <InputLabel class="mt-2">Imagem</InputLabel>
+                <TextInput type="file" placeholder="Imagem" @change="carregarImagem($event)"/>
+                <p class="text-xs italic">Selecione no formato PNG ou JPG</p>
+
+                <div class="flex shrink-0 flex-wrap items-center pt-4 justify-end">
+                    <button @click="closeModal()" class="rounded-md border border-transparent py-2 px-4 text-center text-sm transition-all text-slate-600 hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
+                        Voltar
+                    </button>
+                    <button @click="atualizar" class="rounded-md bg-green-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-green-700 focus:shadow-none active:bg-green-700 hover:bg-green-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2" type="button">
+                        Atualizar
+                    </button>
+                </div>    
+            </form>
         </Modal>
 
     </AuthenticatedLayout>
