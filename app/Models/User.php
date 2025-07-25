@@ -44,6 +44,26 @@ class User extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
 
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class)->withPivot('id');
+    }
+
+    public function assignPermission(string $permission): void
+    {
+
+        $permission = $this->permissions()->firstOrCreate([
+            'name' => $permission,
+        ]);
+
+        $this->permissions()->attach($permission);
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        return $this->permissions()->where('name', $permission)->exists();
+    }
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

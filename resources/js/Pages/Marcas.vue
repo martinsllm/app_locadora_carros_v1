@@ -220,6 +220,7 @@ onMounted(() => {
         
         <!-- Card de buscas -->
         <Card>
+            {{ $page.props.auth.user.permissions }}
             <div class="flex flex-wrap -mx-3 mb-6">
 
                 <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">

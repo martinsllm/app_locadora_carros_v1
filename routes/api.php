@@ -13,7 +13,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::prefix('v1')->middleware('jwt.auth')->group(function () {
-    Route::apiResource('/cliente', ClienteController::class);
+    Route::apiResource('/cliente', ClienteController::class)->middleware('can:admin');
     Route::apiResource('/carro', CarroController::class);
     Route::apiResource('/locacao', LocacaoController::class);
     Route::apiResource('/marca', MarcaController::class);
