@@ -3,8 +3,10 @@
 > Sistema de Locação de Veículos utilizando Laravel
 
 ## Baixar o projeto
+
 Primeiro passo, clonar o projeto:
-``` bash
+
+```bash
 # Clonar
 git clone https://github.com/martinsllm/app_controle_tarefas.git
 
@@ -14,7 +16,7 @@ cd app_controle_tarefas
 
 ## Configuração - Backend
 
-``` bash
+```bash
 # Instalar dependências do projeto
 composer install
 
@@ -25,9 +27,14 @@ php artisan key:generate
 # Criar migrations (tabelas)
 php artisan migrate
 
+# Rodar o backend em ambiente local
+php artisan serve
+
 ```
+
 ## Configuração - Frontend
-``` bash
+
+```bash
 # Atualizar dependências
 npm install
 
@@ -37,5 +44,3 @@ npm run dev
 # Rodar em ambiente de produção
 npm run build
 ```
-
-

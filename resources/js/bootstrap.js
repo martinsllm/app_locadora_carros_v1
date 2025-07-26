@@ -30,7 +30,7 @@ axios.interceptors.response.use(
         return response
     },
     error => {
-        if(error.response.status == 401 && error.response.message == 'Token has expired') {
+        if(error.response.status == 401 && error.response.data.message == 'Token has expired') {
             axios.post('http://localhost:8000/api/refresh')
                 .then(response => {
                     console.log('Refresh do token')
