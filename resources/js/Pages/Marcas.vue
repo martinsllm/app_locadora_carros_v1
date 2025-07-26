@@ -44,17 +44,6 @@ function closeModal(id) {
     transacaoStatus.value = ''
 }
 
-function getToken() {
-    let token = document.cookie.split(";").find(indice => {
-        return indice.includes("token=")
-    })
-
-    token = token.split('=')[1]
-    token = 'Bearer ' + token
-
-    return token
-}
-
 const form = useForm({
     nome: '',
     imagem: [],
@@ -66,13 +55,9 @@ const submit = () => {
     formData.append('nome', form.nome)
     formData.append('imagem', form.imagem[0])
 
-    let token = getToken()
-
     let config = {
         headers: {
-            'Content-Type': 'multipart/form-data',
-            'Accept': 'application/json',
-            'Authorization': token
+            'Content-Type': 'multipart/form-data'
         }
     }
     
@@ -81,7 +66,7 @@ const submit = () => {
             transacaoStatus.value = 'sucesso'
             transacaoMessage.message = 'ID do registro: ' + response.data.id
             transacaoMessage.data = ''
-            
+            reload(3000)
         }).catch(errors => {
             transacaoStatus.value = 'erro'
             transacaoMessage.data = errors.response.data.errors
@@ -94,18 +79,9 @@ const carregarImagem = (e) => {
 }
 
 const buscarLista = () => {
-    let token = getToken()
-
-    let config = {
-        headers: {
-            'Accept': 'application/json',
-            'Authorization': token
-        }
-    }
-
     let url = urlBase.value + '?' + urlPaginacao.value + urlFiltro.value
 
-    axios.get(url, config)
+    axios.get(url)
         .then(response => {
             marcas.value = response.data
         }).catch(errors => {
@@ -149,22 +125,13 @@ function remover() {
     let formData = new FormData()
     formData.append('_method', 'delete')
 
-    let config = {
-        headers: {
-            'Accept': 'application/json',
-            'Authorization': getToken()
-        }
-    }
-
-    axios.post(url, formData, config)
+    axios.post(url, formData)
         .then(response => {
             transacaoStatus.value = 'sucesso'
             transacaoMessage.message = response.data.msg
             buscarLista()
 
-            setTimeout(function() {
-                location.reload();
-            }, 5000);  
+            reload(3000)
         }).catch(errors => {
             transacaoStatus.value = 'erro'
             transacaoMessage.message = errors.response.data.erro
@@ -184,8 +151,7 @@ function atualizar() {
 
     let config = {
         headers: {
-            'Accept': 'application/json',
-            'Authorization': getToken()
+            'Content-Type': 'multipart/form-data',
         }
     }
 
@@ -194,15 +160,18 @@ function atualizar() {
             transacaoStatus.value = 'sucesso'
             transacaoMessage.message = 'Registro ' + response.data.id + ' atualizado com sucesso!'
             transacaoMessage.data = ''
-
-            setTimeout(function() {
-                location.reload();
-            }, 3000);  
+            reload(3000)
         }).catch(errors => {
             transacaoStatus.value = 'erro'
             transacaoMessage.data = errors.response.data.errors
             console.log(errors.response.data.errors)
         })
+}
+
+function reload(time) {
+    setTimeout(function() {
+        location.reload();
+    }, time);  
 }
 
 
@@ -220,7 +189,6 @@ onMounted(() => {
         
         <!-- Card de buscas -->
         <Card>
-            {{ $page.props.auth.user.permissions }}
             <div class="flex flex-wrap -mx-3 mb-6">
 
                 <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
