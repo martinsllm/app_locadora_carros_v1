@@ -25,6 +25,7 @@ php artisan key:generate
 # Criar migrations (tabelas)
 php artisan migrate
 
+```
 ## Configuração - Frontend
 ``` bash
 # Atualizar dependências
@@ -36,3 +37,5 @@ npm run dev
 # Rodar em ambiente de produção
 npm run build
 ```
+
+
